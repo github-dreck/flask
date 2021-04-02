@@ -1,0 +1,35 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy Python app to Azure Web App - icttrustcenter-dev-app(icttrustcenter-dev-app-staging)
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python version
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.8'
+
+    - name: Build using AppService-Build
+      uses: azure/appservice-build@v2
+      with:
+        platform: python
+        platform-version: '3.8'
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'icttrustcenter-dev-app'
+        slot-name: 'icttrustcenter-dev-app-staging'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_cd7eef03d92d4d509c6243cd9f373f85 }}
